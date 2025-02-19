@@ -6,16 +6,14 @@ import java.util.List;
 import java.util.Map;
 
 public class CheckType {
-    private static final Map<String, List<String>> typeMap = new HashMap<>();
+
     private static final Statistics statistics = new Statistics();
 
-    static {
-        typeMap.put("Integer", new ArrayList<>());
-        typeMap.put("Float", new ArrayList<>());
-        typeMap.put("Double", new ArrayList<>());
-        typeMap.put("String", new ArrayList<>());
-        typeMap.put("Boolean", new ArrayList<>());
-    }
+    private static final Map<String, List<String>> typeMap = Map.of(
+            "Integer", java.util.List.of(),
+            "Float", java.util.List.of(),
+            "String", java.util.List.of()
+    );
 
     public static void determineTypeAndPrint(String line) {
         if (line == null || line.isEmpty()) {
@@ -62,7 +60,7 @@ public class CheckType {
         return statistics;
     }
 
-    private static String getType(String str) {
+    static String getType(String str) {
         if (isInteger(str)) return "Integer";
         if (isFloat(str)) return "Float";
         if (isDouble(str)) return "Double";

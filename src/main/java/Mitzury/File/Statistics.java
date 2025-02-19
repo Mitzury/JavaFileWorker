@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Statistics {
-    private final Map<String, TypeStats> statsMap = new HashMap<>();
+    private static final Map<String, TypeStats> statsMap = new HashMap<>();
 
     static class TypeStats {
         int count = 0;
@@ -52,11 +52,11 @@ public class Statistics {
         }
     }
 
-    public void addNumber(String type, double value) {
+    public static void addNumber(String type, double value) {
         statsMap.computeIfAbsent(type, k -> new TypeStats()).addNumber(value);
     }
 
-    public void addString(String type, String value) {
+    public static void addString(String type, String value) {
         statsMap.computeIfAbsent(type, k -> new TypeStats()).addString(value);
     }
 
