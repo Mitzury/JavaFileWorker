@@ -1,0 +1,8 @@
+true
+3.14
+false
+Test String
+456
+123
+45.67
+Hello World

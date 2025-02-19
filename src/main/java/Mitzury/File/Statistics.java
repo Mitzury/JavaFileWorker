@@ -1,19 +1,18 @@
 package Mitzury.File;
 
-
 import java.util.HashMap;
 import java.util.Map;
 
 public class Statistics {
-    private static final Map<String, TypeStats> statsMap = new HashMap<>();
+    private final Map<String, TypeStats> statsMap = new HashMap<>();
 
-    static class TypeStats {
-        int count = 0;
-        double sum = 0;
-        double min = Double.MAX_VALUE;
-        double max = Double.MIN_VALUE;
-        int minLength = Integer.MAX_VALUE;
-        int maxLength = Integer.MIN_VALUE;
+    public static class TypeStats {
+        private int count = 0;
+        private double sum = 0;
+        private double min = Double.MAX_VALUE;
+        private double max = Double.MIN_VALUE;
+        private int minLength = Integer.MAX_VALUE;
+        private int maxLength = Integer.MIN_VALUE;
 
         public void addNumber(double value) {
             count++;
@@ -52,23 +51,25 @@ public class Statistics {
         }
     }
 
-    public static void addNumber(String type, double value) {
+    public void addNumber(String type, double value) {
         statsMap.computeIfAbsent(type, k -> new TypeStats()).addNumber(value);
     }
 
-    public static void addString(String type, String value) {
+    public void addString(String type, String value) {
         statsMap.computeIfAbsent(type, k -> new TypeStats()).addString(value);
     }
 
-    public void printStats(boolean fullStats) {
+    public String printStats(boolean fullStats) {
+        StringBuilder result = new StringBuilder();
         for (Map.Entry<String, TypeStats> entry : statsMap.entrySet()) {
-            System.out.println("-Тип: " + entry.getKey());
+            result.append("-Тип: ").append(entry.getKey()).append("\n");
             if (fullStats) {
-                System.out.println(entry.getValue().getFullStats());
+                result.append(entry.getValue().getFullStats());
             } else {
-                System.out.println(entry.getValue().getBriefStats());
+                result.append(entry.getValue().getBriefStats());
             }
-            System.out.println();
+            result.append("\n");
         }
+        return result.toString();
     }
 }

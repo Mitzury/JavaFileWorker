@@ -6,16 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 public class CheckType {
+    private final Statistics statistics;
+    private final Map<String, List<String>> typeMap;
 
-    private static final Statistics statistics = new Statistics();
+    public CheckType(Statistics statistics) {
+        this.statistics = statistics;
+        this.typeMap = new HashMap<>();
+        typeMap.put("Integer", new ArrayList<>());
+        typeMap.put("Float", new ArrayList<>());
+        typeMap.put("String", new ArrayList<>());
+        typeMap.put("Boolean", new ArrayList<>());
+    }
 
-    private static final Map<String, List<String>> typeMap = Map.of(
-            "Integer", java.util.List.of(),
-            "Float", java.util.List.of(),
-            "String", java.util.List.of()
-    );
-
-    public static void determineTypeAndPrint(String line) {
+    public void determineTypeAndPrint(String line) {
         if (line == null || line.isEmpty()) {
             System.out.println("Пустая строка");
             return;
@@ -36,9 +39,6 @@ public class CheckType {
             case "Float":
                 addNumberToStats("Float", Float.parseFloat(line));
                 break;
-            case "Double":
-                addNumberToStats("Double", Double.parseDouble(line));
-                break;
             case "Boolean":
                 // Boolean значения игнорируются в статистике
                 break;
@@ -48,28 +48,27 @@ public class CheckType {
         }
     }
 
-    private static void addNumberToStats(String type, double value) {
+    private void addNumberToStats(String type, double value) {
         statistics.addNumber(type, value);
     }
 
-    public static Map<String, List<String>> getTypeMap() {
+    public Map<String, List<String>> getTypeMap() {
         return typeMap;
     }
 
-    public static Statistics getStatistics() {
+    public Statistics getStatistics() {
         return statistics;
     }
 
-    static String getType(String str) {
+    public String getType(String str) {
         if (isInteger(str)) return "Integer";
         if (isFloat(str)) return "Float";
-        if (isDouble(str)) return "Double";
         if (isBoolean(str)) return "Boolean";
         if (isString(str)) return "String";
         return "Unknown";
     }
 
-    private static boolean isInteger(String str) {
+    private boolean isInteger(String str) {
         try {
             Integer.parseInt(str);
             return true;
@@ -78,7 +77,7 @@ public class CheckType {
         }
     }
 
-    private static boolean isFloat(String str) {
+    private boolean isFloat(String str) {
         try {
             Float.parseFloat(str);
             return true;
@@ -87,20 +86,11 @@ public class CheckType {
         }
     }
 
-    private static boolean isDouble(String str) {
-        try {
-            Double.parseDouble(str);
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    private static boolean isBoolean(String str) {
+    private boolean isBoolean(String str) {
         return str.equalsIgnoreCase("true") || str.equalsIgnoreCase("false");
     }
 
-    private static boolean isString(String str) {
-        return str.matches("^[a-zA-Zа-яА-Я\\s\\-.,!?()\"':;]+$");
+    private boolean isString(String str) {
+        return str != null && !str.isEmpty() && !isInteger(str) && !isFloat(str) && !isBoolean(str);
     }
 }
